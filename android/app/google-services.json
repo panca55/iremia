@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "977802706651",
+    "project_id": "iremia-c228c",
+    "storage_bucket": "iremia-c228c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977802706651:android:de95b2e23004c1ff95d6fe",
+        "android_client_info": {
+          "package_name": "com.panca.iremia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5OUSxS32cvhmJfrG4pgDmgF7cdba0QEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
