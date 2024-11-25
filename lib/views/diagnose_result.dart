@@ -5,6 +5,7 @@ import 'package:iremia/controllers/pdf_controller.dart';
 import 'package:iremia/controllers/user_controller.dart';
 import 'package:iremia/provider/question_provider.dart';
 import 'package:iremia/theme/global_color_theme.dart';
+import 'package:iremia/views/widgets/navbar.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 import 'package:printing/printing.dart';
@@ -28,11 +29,13 @@ class DiagnoseResult extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 20,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: const Text('Hasil Diagnosa'),
+        shadowColor: Colors.black.withOpacity(0.25),
         leading: GestureDetector(
-          onTap: ()=> Navigator.pop(context),
+          onTap: ()=> Navigator.of(context).popUntil(ModalRoute.withName(Navbar.routname)),
           child: Container(
             width: 32,
             height: 32,
@@ -89,13 +92,7 @@ class DiagnoseResult extends StatelessWidget {
             return PdfPreview(
               initialPageFormat: PdfPageFormat.a4,
               scrollViewDecoration: const BoxDecoration(color: Colors.white),
-              // pdfPreviewPageDecoration: BoxDecoration(
-              //   color: Colors.white,
-              //   border: Border.all(),
-              //   boxShadow: [
-              //     BoxShadow(color: Colors.black.withOpacity(0.25), offset: const Offset(0, 4))
-              //   ]
-              // ),
+              previewPageMargin: const EdgeInsets.only(top: 46,right: 26, left: 26),
               build: (format) => pdf.save(),
               allowPrinting: false,
               allowSharing: false,

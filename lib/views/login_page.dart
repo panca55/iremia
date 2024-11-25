@@ -183,13 +183,43 @@ class _LoginPageState extends State<LoginPage> {
                                   await userController.loginUser(email, password);
                               if (success) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Login berhasil')),
+                                  SnackBar(
+                                    dismissDirection: DismissDirection.up,
+                                    backgroundColor: GlobalColorTheme.successColor,
+                                    margin: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .height -
+                                              100,
+                                          left: 10,
+                                          right: 10),
+                                      behavior: SnackBarBehavior.floating,
+                                    duration: const Duration(milliseconds: 1000),
+                                    content: Text('Login berhasil', style: GoogleFonts.poppins(color: Colors.white),)
+                                    ),
                                 );
                                   Navigator.pushReplacementNamed(context, Navbar.routname);
                                 // Navigate to Home Page
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Login gagal')),
+                                  SnackBar(
+                                      dismissDirection: DismissDirection.up,
+                                      backgroundColor:
+                                          GlobalColorTheme.errorColor,
+                                      margin: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .height - 100,
+                                          left: 10,
+                                          right: 10),
+                                      behavior: SnackBarBehavior.floating,
+                                      duration:
+                                          const Duration(milliseconds: 1000),
+                                      content: Text(
+                                        'Login gagal',
+                                        style: GoogleFonts.poppins(
+                                            color: Colors.white),
+                                      )),
                                 );
                               }
                             }

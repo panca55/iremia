@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iremia/controllers/user_controller.dart';
 import 'package:iremia/models/user_model.dart';
 import 'package:iremia/theme/global_color_theme.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -15,12 +15,35 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _usiaController = TextEditingController();
   String? _valKelamin;
   final List<String> _listKelamin = ["Laki-laki", "Perempuan"];
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _usiaController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final registerProvider = Provider.of<UserModel>(context, listen: false);
     final heightScreen = MediaQuery.of(context).size.height;
+    final userController = Provider.of<UserController>(context);
+    if (userController.currentUser != null) {
+      _nameController.text = userController.currentUser!.name ?? '';
+      _emailController.text = userController.currentUser!.email ?? '';
+      _passwordController.text = userController.currentUser!.password ?? '';
+      _confirmPasswordController.text = '';
+      _usiaController.text = userController.currentUser!.usia ?? '';
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -77,6 +100,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         )),
                     TextField(
                       keyboardType: TextInputType.text,
+                      controller: _nameController,
                       decoration: InputDecoration(
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         labelText: 'Nama Lengkap',
@@ -125,6 +149,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   )),
                               TextField(
                                 keyboardType: TextInputType.number,
+                                controller: _usiaController,
                                 maxLengthEnforcement: MaxLengthEnforcement.none,
                                 textInputAction: TextInputAction.next,
                                 maxLength: 2,
@@ -235,6 +260,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         )),
                     TextField(
                       keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
                       decoration: InputDecoration(
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         labelText: 'Email',
@@ -277,6 +303,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Consumer<UserModel>(
                       builder: (BuildContext context, value, Widget? child) {
                         return TextField(
+                          controller: _passwordController,
                           obscureText: registerProvider.isHide ? true : false,
                           decoration: InputDecoration(
                               floatingLabelBehavior:
@@ -333,6 +360,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Consumer<UserModel>(
                       builder: (BuildContext context, value, Widget? child) {
                         return TextField(
+                          controller: _confirmPasswordController,
                           obscureText: registerProvider.isHide ? true : false,
                           decoration: InputDecoration(
                               floatingLabelBehavior:
@@ -387,11 +415,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             children: [
               GestureDetector(
                   onTap: () {
-                    PersistentNavBarNavigator.popUntilFirstScreenOnSelectedTabScreen(
-                      context,
-                      routeName:
-                          "/",
-                    );
+                    Navigator.of(context).pop();
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal:22.5),
@@ -405,7 +429,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             color: GlobalColorTheme.errorColor, fontWeight: FontWeight.bold, fontSize: 12)),
                   )),
               GestureDetector(
-                  onTap: () {},
+                  onTap: () async{
+                    final success = await userController.editUserProfile(
+                      userId: userController.currentUser?.userId ?? '',
+                      name: _nameController.text,
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                      age: _usiaController.text,
+                      gender: _valKelamin,
+                  );
+                  if (success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Profil berhasil diperbarui!')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Gagal memperbarui profil.')),
+                      );
+                    }
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 7.5, horizontal: 22.5),

@@ -119,4 +119,49 @@ class UserController extends ChangeNotifier {
       debugPrint('Error logging out: $e');
     }
   }
+
+  /// **EDIT USER PROFILE**
+  Future<bool> editUserProfile({
+    required String userId,
+    String? name,
+    String? email,
+    String? password,
+    String? gender,
+    String? age,
+  }) async {
+    try {
+      // Pastikan userId tidak kosong
+      if (userId.isEmpty) {
+        throw Exception('User ID is required.');
+      }
+      // Update data di Firestore
+      final Map<String, dynamic> updatedData = {};
+      if (name != null) updatedData['name'] = name;
+      if (email != null) updatedData['email'] = email;
+      if (password != null) updatedData['password'] = password;
+      if (gender != null) updatedData['gender'] = gender;
+      if (age != null) updatedData['age'] = age;
+
+      if (updatedData.isNotEmpty) {
+        await _firestore.collection('users').doc(userId).update(updatedData);
+      }
+
+      // Update _currentUser di lokal jika ada perubahan
+      if (_currentUser != null) {
+        _currentUser = _currentUser!.copyWith(
+          name: name ?? _currentUser!.name,
+          email: email ?? _currentUser!.email,
+          password: password ?? _currentUser!.password,
+          jenisKelamin: gender ?? _currentUser!.jenisKelamin,
+          usia: age ?? _currentUser!.usia,
+        );
+        notifyListeners();
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('Error updating user profile: $e');
+      return false;
+    }
+  }
 }

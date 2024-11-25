@@ -10,6 +10,7 @@ import 'package:iremia/models/user_model.dart';
 import 'package:iremia/provider/articles_provider.dart';
 import 'package:iremia/provider/question_provider.dart';
 import 'package:iremia/views/article_page.dart';
+import 'package:iremia/views/diagnose_history.dart';
 import 'package:iremia/views/diagnose_result.dart';
 import 'package:iremia/views/edit_profile_page.dart';
 import 'package:iremia/views/login_page.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         EditProfilePage.routname: (context) => const EditProfilePage(),
         QuestionnairePage.routeName: (context) => const QuestionnairePage(),
         DiagnoseResult.routeName: (context) =>  const DiagnoseResult(),
+        DiagnoseHistory.routename: (context) =>  const DiagnoseHistory(),
         Navbar.routname: (context) =>  Navbar()
       },
     );

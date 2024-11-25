@@ -8,15 +8,30 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:stroke_text/stroke_text.dart';
 
-class QuestionnairePage extends StatelessWidget {
+class QuestionnairePage extends StatefulWidget {
   static String routeName = '/questionnaire-page';
   final int? questionId;
 
   const QuestionnairePage({super.key, this.questionId});
 
   @override
+  State<QuestionnairePage> createState() => _QuestionnairePageState();
+}
+
+class _QuestionnairePageState extends State<QuestionnairePage> {
+  late QuestionProvider questionProvider;
+  late String? currentUser;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    questionProvider = Provider.of<QuestionProvider>(context, listen: false);
+    currentUser = FirebaseAuth.instance.currentUser?.uid;
+  }
+  @override
   Widget build(BuildContext context) {
-    final questionProvider = Provider.of<QuestionProvider>(context);
+    final questionId = widget.questionId;
+
     if (questionId == null) {
       return const Scaffold(
         body: Center(
@@ -36,7 +51,15 @@ class QuestionnairePage extends StatelessWidget {
       );
     }
 
-    final question = questionProvider.getQuestionById(questionId!);
+    final question = questionProvider.getQuestionById(widget.questionId!);
+    // ignore: unnecessary_null_comparison
+    if (question == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Pertanyaan tidak ditemukan.'),
+        ),
+      );
+    }
 
     final currentIndex = questionProvider.questions
         .indexWhere((q) => q.questionId == questionId);
@@ -49,12 +72,11 @@ class QuestionnairePage extends StatelessWidget {
         color: GlobalColorTheme.primaryColor,
         child: Column(
           children: [
-            // Header dan tombol kembali
             Row(
               children: [
                 GestureDetector(
                   onTap: () {
-                    PersistentNavBarNavigator.pop(context);
+                      PersistentNavBarNavigator.pop(context);
                   },
                   child: Container(
                     width: 26,
@@ -132,6 +154,15 @@ class QuestionnairePage extends StatelessWidget {
 
                   return GestureDetector(
                     onTap: () async {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      );
                       // Simpan jawaban
                       questionProvider.saveAnswer(question.questionId!, cfUser, bai);
 
@@ -149,33 +180,37 @@ class QuestionnairePage extends StatelessWidget {
                             .getLatestDiagnosis(currentUser);
 
                         // Navigasi ke hasil diagnosa
-                        Navigator.pushReplacementNamed(
-                          context,
-                          DiagnoseResult.routeName,
-                          arguments: latestDiagnosis?.diagnosisId ?? '',
-                        );
+                        
+                          Navigator.pushReplacementNamed(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            DiagnoseResult.routeName,
+                            arguments: latestDiagnosis?.diagnosisId ?? '',
+                          );
                       } else {
                         // Navigasi ke pertanyaan berikutnya
                         final nextQuestionId = questionProvider
                             .questions[currentIndex + 1].questionId;
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => QuestionnairePage(
-                              questionId: nextQuestionId,
+                        
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QuestionnairePage(
+                                questionId: nextQuestionId,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        
                       }
 
                       // Tampilkan notifikasi jawaban yang dipilih
+                      // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
                             'Anda memilih: ${answer['text']}',
                           ),
-                          duration: const Duration(seconds: 2),
+                          duration: const Duration(seconds: 1),
                         ),
                       );
                     },

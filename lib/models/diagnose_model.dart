@@ -7,6 +7,7 @@ class DiagnosisModel extends ChangeNotifier {
   final int? totalBai;
   final String? diagnosisResult;
   final String? dateDiagnosis;
+  final DateTime? dateCreated;
 
   DiagnosisModel({
     this.diagnosisId,
@@ -15,6 +16,7 @@ class DiagnosisModel extends ChangeNotifier {
     this.totalBai,
     this.diagnosisResult,
     this.dateDiagnosis,
+    this.dateCreated
   });
 
   factory DiagnosisModel.fromFirestore(Map<String, dynamic> data) {
@@ -25,6 +27,7 @@ class DiagnosisModel extends ChangeNotifier {
       totalBai: (data['totalBai'] as num?)?.toInt(),
       diagnosisResult: data['diagnosisResult'] as String?,
       dateDiagnosis: data['dateDiagnosis'] as String?,
+      dateCreated: (data['dateCreated']).toDate()
     );
   }
 
@@ -36,6 +39,7 @@ class DiagnosisModel extends ChangeNotifier {
       'totalBai': totalBai,
       'diagnosisResult': diagnosisResult,
       'dateDiagnosis': dateDiagnosis,
+      'dateCreated': dateCreated,
     };
   }
 }

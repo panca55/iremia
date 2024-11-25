@@ -3,42 +3,243 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iremia/models/diagnose_model.dart';
 import 'package:iremia/models/question_model.dart';
-
+import 'package:uuid/uuid.dart';
 class QuestionProvider with ChangeNotifier {
+  final Uuid _uuid = Uuid();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final List<DiagnosisModel> _diagnose = [];
+  List<DiagnosisModel> get diagnose => _diagnose;
 
   final List<QuestionModel> _questions = [
     QuestionModel(
       questionId: 1,
-      questionText: 'Apakah Anda merasa mati rasa atau kesemutan?',
+      questionText: 'Apakah kamu sering merasa mati rasa atau kesemutan?',
       cfPakar: 0.05,
       answers: [
         {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
-        {'text': 'Ringan', 'cfUser': 0.1, 'bai': 1},
-        {'text': 'Sedang', 'cfUser': 0.2, 'bai': 2},
-        {'text': 'Berat', 'cfUser': 0.3, 'bai': 3},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
       ],
     ),
     QuestionModel(
       questionId: 2,
-      questionText: 'Apakah Anda merasa panas?',
-      cfPakar: 0.15,
+      questionText: 'Apakah kamu sering merasa kepanasan?',
+      cfPakar: 0.05,
       answers: [
         {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
-        {'text': 'Ringan', 'cfUser': 0.1, 'bai': 1},
-        {'text': 'Sedang', 'cfUser': 0.2, 'bai': 2},
-        {'text': 'Berat', 'cfUser': 0.3, 'bai': 3},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
       ],
     ),
     QuestionModel(
       questionId: 3,
-      questionText: 'Apakah kaki Anda gemetar?',
+      questionText: 'Apakah kakimu sering merasa gemetar?',
+      cfPakar: 0.15,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 4,
+      questionText: 'Apakah kamu merasa sulit untuk bersantai?',
+      cfPakar: 0.05,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 5,
+      questionText: 'Apakah kamu takut sesuatu yang buruk akan terjadi?',
+      cfPakar: 0.15,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 6,
+      questionText: 'Apakah kamu sering merasa pusing?',
+      cfPakar: 0.05,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 7,
+      questionText: 'Apakah kamu merasa jantungmu berdebar-debar?',
+      cfPakar: 0.15,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 8,
+      questionText: 'Apakah kamu merasa tidak stabil saat berdiri?',
       cfPakar: 0.25,
       answers: [
         {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
-        {'text': 'Ringan', 'cfUser': 0.1, 'bai': 1},
-        {'text': 'Sedang', 'cfUser': 0.2, 'bai': 2},
-        {'text': 'Berat', 'cfUser': 0.3, 'bai': 3},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 9,
+      questionText: 'Apakah kamu merasa ketakutan atau panik secara tiba-tiba?',
+      cfPakar: 0.25,  
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 10,
+      questionText: 'Apakah kamu merasa tegang atau gugup?',
+      cfPakar: 0.05,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 11,
+      questionText: 'Apakah kamu sering merasa seperti tercekik?',
+      cfPakar: 0.15,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 12,
+      questionText: 'Apakah tanganmu sering gemetar?',
+      cfPakar: 0.15,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 13,
+      questionText: 'Apakah kamu merasa tidak stabil saat berjalan?',
+      cfPakar: 0.25,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 14,
+      questionText: 'Apakah kamu merasa takut kehilangan kendali?',
+      cfPakar: 0.05,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 15,
+      questionText: 'Apakah kamu sering merasa sulit bernafas?',
+      cfPakar: 0.25,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 16,
+      questionText: 'Apakah kamu sering merasa takut mati?',
+      cfPakar: 0.25,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 17,
+      questionText: 'Apakah kamu sering merasa sangat ketakutan?',
+      cfPakar: 0.15,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 18,
+      questionText: 'Apakah kamu sering mengalami gangguan pencernaan?',
+      cfPakar: 0.25,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 19,
+      questionText: 'Apakah kamu sering merasa kepala ringan, seperti ingin pingsan?',
+      cfPakar: 0.25,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 20,
+      questionText: 'Apakah wajahmu sering memerah?',
+      cfPakar: 0.05,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
+      ],
+    ),
+    QuestionModel(
+      questionId: 21,
+      questionText: 'Apakah kamu sering berkeringat panas atau dingin secara tiba-tiba?',
+      cfPakar: 0.15,
+      answers: [
+        {'text': 'Tidak sama sekali', 'cfUser': 0.0, 'bai': 0},
+        {'text': 'Terkadang', 'cfUser': 0.1, 'bai': 1},
+        {'text': 'Cukup sering', 'cfUser': 0.2, 'bai': 2},
+        {'text': 'Sering', 'cfUser': 0.3, 'bai': 3},
       ],
     ),
   ];
@@ -63,12 +264,10 @@ class QuestionProvider with ChangeNotifier {
 
   
 
-  Future<DiagnosisModel?> getDiagnosisByIdFromFirestore(String userId,
+  Future<DiagnosisModel?> getDiagnosisByIdFromFirestore(
       String diagnosisId) async {
     try {
       final snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
           .collection('diagnoses')
           .doc(diagnosisId)
           .get();
@@ -83,12 +282,33 @@ class QuestionProvider with ChangeNotifier {
     }
   }
 
+  Future<void> getHistoryDiagnosis(
+      String userId) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('diagnoses')
+          .where('userId', isEqualTo: userId)
+          .get();
+      
+      final fetchHistory= querySnapshot.docs
+          .map((doc) => DiagnosisModel.fromFirestore(doc.data()))
+          .toList();
+      _diagnose.clear();
+      _diagnose.addAll(fetchHistory);
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Error fetching diagnoses: $e');
+    }
+  }
+
+
   void saveAnswer(int questionId, double cfUser, int bai) {
     final question = getQuestionById(questionId);
     final cfPakar = question.cfPakar;
 
     final cfResult = cfUser * cfPakar!;
     _cfResults[questionId] = cfResult;
+    debugPrint('${cfUser.toString()} * ${cfPakar.toString()} = ${_cfResults[questionId].toString()}');
     _baiResults[questionId] = bai;
 
     notifyListeners();
@@ -101,9 +321,10 @@ class QuestionProvider with ChangeNotifier {
   }
 
   double calculateFinalCF() {
-    double combinedCF = 0.0;
+    double combinedCF = _cfResults.values.first;
     for (var cf in _cfResults.values) {
       combinedCF = combinedCF + cf * (1 - combinedCF); // Kombinasi CF
+      debugPrint("combinedCF = $combinedCF");
     }
     _finalCF = combinedCF * 100;
     notifyListeners();
@@ -125,16 +346,9 @@ class QuestionProvider with ChangeNotifier {
   Future<void> saveDiagnosis(String userId) async {
     try {
       // Ambil referensi subkoleksi diagnosis untuk user
-      final userDiagnosesRef =
-          _firestore.collection('users').doc(userId).collection('diagnoses');
+      final userDiagnosesRef =_firestore.collection('diagnoses');
 
-      // Ambil dokumen terakhir di subkoleksi diagnosa untuk mendapatkan ID terakhir
-      final snapshot = await userDiagnosesRef
-          .orderBy('diagnosisId', descending: true)
-          .limit(1)
-          .get();
-      int newDiagnosisId =
-          snapshot.docs.isEmpty ? 1 : int.parse(snapshot.docs.first.id) + 1;
+      final diagnoseId = _uuid.v4();
 
       // Format tanggal
       DateTime currentDate = DateTime.now();
@@ -143,12 +357,13 @@ class QuestionProvider with ChangeNotifier {
 
       // Buat diagnosis baru
       final diagnosis = DiagnosisModel(
-        diagnosisId: newDiagnosisId.toString(),
+        diagnosisId: diagnoseId,
         userId: userId,
         totalCf: _finalCF,
         totalBai: _totalBai,
         diagnosisResult: getDiagnosisResult(),
         dateDiagnosis: formattedDate,
+        dateCreated: DateTime.now()
       );
 
       // Simpan diagnosis ke Firestore
@@ -159,9 +374,11 @@ class QuestionProvider with ChangeNotifier {
         'totalBai': diagnosis.totalBai,
         'diagnosisResult': diagnosis.diagnosisResult,
         'dateDiagnosis': diagnosis.dateDiagnosis, // String formatted
+        'dateCreated': FieldValue.serverTimestamp(),
       });
 
       // Notifikasi listener
+      _diagnose.add(diagnosis);
       notifyListeners();
     } catch (e) {
       debugPrint('Error saving diagnosis: $e');
@@ -170,11 +387,10 @@ class QuestionProvider with ChangeNotifier {
 
   Future<DiagnosisModel?> getLatestDiagnosis(String userId) async {
     try {
-      final userDiagnosesRef =
-          _firestore.collection('users').doc(userId).collection('diagnoses');
-
-      final snapshot = await userDiagnosesRef
-          .orderBy('diagnosisId', descending: true)
+      final snapshot = await _firestore
+          .collection('diagnoses')
+          .where('userId', isEqualTo: userId)
+          .orderBy('dateCreated', descending: true)
           .limit(1)
           .get();
 

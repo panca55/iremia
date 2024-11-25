@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:iremia/config/navigator_historypage.dart';
 import 'package:iremia/config/navigator_homepage.dart';
 import 'package:iremia/config/navigator_profilepage.dart';
 import 'package:iremia/theme/global_color_theme.dart';
-import 'package:iremia/views/diagnose_history.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class Navbar extends StatelessWidget {
@@ -49,7 +49,7 @@ class Navbar extends StatelessWidget {
   List<Widget> _buildScreens() {
     return [
       const NavigatorHomepage(),
-      const DiagnoseHistory(),
+      const NavigatorHistorypage(),
       const NavigatorProfilepage(),
     ];
   }

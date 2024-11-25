@@ -17,7 +17,7 @@ class PdfController extends ChangeNotifier {
 
     // Ambil diagnosa dari Firestore berdasarkan diagnoseId
     final diagnosis =
-        await questionProvider.getDiagnosisByIdFromFirestore(userId,diagnoseId);
+        await questionProvider.getDiagnosisByIdFromFirestore(diagnoseId);
 
     // Ambil data user
     final userController = Provider.of<UserController>(context, listen: false);
@@ -29,7 +29,7 @@ class PdfController extends ChangeNotifier {
 
     // Nilai CF dari diagnosa
     final double finalCfDesimal = diagnosis.totalCf ?? 0.0;
-    final int finalCfInteger = finalCfDesimal ~/ 1;
+    final int finalCfInteger = finalCfDesimal.round();
 
     // Buat dokumen PDF
     final pdf = pw.Document();
@@ -170,7 +170,7 @@ class PdfController extends ChangeNotifier {
   }
 
   /// Widget untuk menampilkan chart bar tingkat CF
-  pw.Widget _buildChartBar(int cfPercentage) {
+  pw.Widget _buildChartBar(int cfValue) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.center,
       children: [
@@ -199,10 +199,10 @@ class PdfController extends ChangeNotifier {
                 ),
                 pw.Positioned(
                   top: -18,
-                  left: (cfPercentage / 100) * 300, // Skala 0-100
+                  left: (cfValue / 63) * 423,
                   child: pw.Column(
                     children: [
-                      pw.Text('$cfPercentage'),
+                      pw.Text('$cfValue'),
                       pw.Container(
                         width: 10,
                         height: 28,
