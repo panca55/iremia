@@ -7,6 +7,7 @@ class UserModel extends ChangeNotifier {
   final String? name;
   final String? usia;
   final String? jenisKelamin;
+  final String? role;
   final DateTime? dateCreated;
   bool isHide = true;
 
@@ -15,8 +16,9 @@ class UserModel extends ChangeNotifier {
     this.name,
     this.email,
     this.password,
-    this.jenisKelamin,
     this.usia,
+    this.jenisKelamin,
+    this.role,
     this.dateCreated,
   });
 
@@ -28,6 +30,7 @@ class UserModel extends ChangeNotifier {
       name: data['name'],
       usia: data['age'],
       jenisKelamin: data['gender'],
+      role: data['role'],
       dateCreated: (data['dateCreated']).toDate(),
     );
   }
@@ -40,6 +43,7 @@ class UserModel extends ChangeNotifier {
       'name': name,
       'age': usia,
       'gender': jenisKelamin,
+      'role': role,
       'dateCreated': dateCreated,
     };
   }
@@ -59,6 +63,7 @@ class UserModel extends ChangeNotifier {
     String? name,
     String? usia,
     String? jenisKelamin,
+    String? role,
     DateTime? dateCreated,
   }) {
     return UserModel(
@@ -68,6 +73,7 @@ class UserModel extends ChangeNotifier {
       name: name ?? this.name,
       usia: usia ?? this.usia,
       jenisKelamin: jenisKelamin ?? this.jenisKelamin,
+      role: role ?? this.role,
       dateCreated: dateCreated ?? this.dateCreated,
     );
   }

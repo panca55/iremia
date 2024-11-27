@@ -5,10 +5,13 @@ import 'package:iremia/models/diagnose_model.dart';
 import 'package:iremia/models/question_model.dart';
 import 'package:uuid/uuid.dart';
 class QuestionProvider with ChangeNotifier {
-  final Uuid _uuid = Uuid();
+  final Uuid _uuid = const Uuid();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<DiagnosisModel> _diagnose = [];
   List<DiagnosisModel> get diagnose => _diagnose;
+
+  final List<DiagnosisModel> _diagnoseRecap = [];
+  List<DiagnosisModel> get diagnoseRecap => _diagnoseRecap;
 
   final List<QuestionModel> _questions = [
     QuestionModel(
@@ -402,6 +405,24 @@ class QuestionProvider with ChangeNotifier {
     } catch (e) {
       debugPrint('Error fetching latest diagnosis: $e');
       return null;
+    }
+  }
+  Future<void> getRecapDiagnosis (List<String> userId) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('diagnoses')
+          .where('userId', isEqualTo: userId)
+          .orderBy('dateCreated', descending: true)
+          .get();
+
+      final fetchHistory = querySnapshot.docs
+          .map((doc) => DiagnosisModel.fromFirestore(doc.data()))
+          .toList();
+      _diagnoseRecap.clear();
+      _diagnoseRecap.addAll(fetchHistory);
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Error fetching diagnoses: $e');
     }
   }
 }

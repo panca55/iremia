@@ -1,8 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:iremia/controllers/pdf_controller.dart';
-import 'package:iremia/controllers/user_controller.dart';
+import 'package:iremia/controllers/pdf_recap_controller.dart';
 import 'package:iremia/provider/question_provider.dart';
 import 'package:iremia/theme/global_color_theme.dart';
 import 'package:iremia/views/widgets/navbar.dart';
@@ -11,20 +10,18 @@ import 'package:provider/provider.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class DiagnoseResult extends StatelessWidget {
-  static String routeName = '/diagnose-result';
+class DiagnoseResultAll extends StatelessWidget {
+  static String routeName = '/diagnose-result-all';
 
-  const DiagnoseResult({super.key});
+  const DiagnoseResultAll({super.key});
 
   @override
   Widget build(BuildContext context) {
     Provider.of<QuestionProvider>(context, listen: false);
-    final diagnoseId = ModalRoute.of(context)!.settings.arguments as String;
 
     // Instance PDF Controller
-    final pdfController = PdfController();
-    final userController = Provider.of<UserController>(context, listen: false);
-    final user = userController.currentUser;
+    final pdfController = PdfRecapController();
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -57,11 +54,11 @@ class DiagnoseResult extends StatelessWidget {
               try {
                 // Generate PDF berdasarkan diagnoseId
                 final pdf =
-                    await pdfController.createPdfById(context, diagnoseId, user!.userId!);
+                    await pdfController.createLatestDiagnosesPdf(context);
                 // Bagikan file PDF
                 await Printing.sharePdf(
                   bytes: await pdf.save(),
-                  filename: 'Hasil_Diagnosa_${user.name}_$diagnoseId.pdf',
+                  filename: 'Hasil Diagnosa Terbaru Semua User.pdf',
                 );
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -73,7 +70,7 @@ class DiagnoseResult extends StatelessWidget {
         ],
       ),
       body: FutureBuilder<pw.Document?>(
-        future: pdfController.createPdfById(context, diagnoseId, user!.userId!),
+        future: pdfController.createLatestDiagnosesPdf(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return  Center(

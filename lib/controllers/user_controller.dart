@@ -7,12 +7,34 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 class UserController extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
+  final List<UserModel> _users = [];
+  List<UserModel> get users => _users;
+
 
   UserModel? _currentUser;
 
   UserModel? get currentUser => _currentUser;
 
   final _key = encrypt.Key.fromLength(32); // Kunci enkripsi 256-bit
+  
+  Future<void> getUser() async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('users')
+          .get();
+
+      final fetchUser = querySnapshot.docs
+          .map((doc) => UserModel.fromFirestore(doc.data()))
+          .toList();
+      _users.clear();
+      _users.addAll(fetchUser);
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Error fetching user: $e');
+    }
+  }
+
 
   /// **Enkripsi Password dengan IV Unik**
   Map<String, String> encryptPassword(String password) {
@@ -60,6 +82,7 @@ class UserController extends ChangeNotifier {
         'age': userModel.usia,
         'password': encryptedData['encryptedPassword'], // Terenkripsi
         'iv': encryptedData['iv'], // Simpan IV
+        'role': 'user',
         'dateCreated': FieldValue.serverTimestamp(),
         'userId': userId,
       });
@@ -86,12 +109,27 @@ class UserController extends ChangeNotifier {
         password: password,
       );
 
-      // Ambil data user dari Firestore berdasarkan userId
+      // Ambil userId dari user yang sedang login
       final userId = userCredential.user?.uid;
+
+      // Ambil data user dari Firestore berdasarkan userId
       final snapshot = await _firestore.collection('users').doc(userId).get();
 
       if (snapshot.exists) {
         final userData = snapshot.data()!;
+
+        // Cek apakah pengguna memiliki role
+        final String? role = userData['role'];
+        if (role == null) {
+          debugPrint('Role tidak ditemukan untuk pengguna.');
+          return false;
+        }
+
+        // Validasi role, Anda bisa menyesuaikan logika ini sesuai kebutuhan
+        if (role != 'admin' && role != 'user') {
+          debugPrint('Role tidak valid.');
+          return false;
+        }
 
         // Simpan data user ke dalam _currentUser
         _currentUser = UserModel.fromFirestore(userData);
@@ -99,14 +137,15 @@ class UserController extends ChangeNotifier {
 
         return true;
       } else {
-        debugPrint('User not found in Firestore');
+        debugPrint('User tidak ditemukan di Firestore.');
         return false;
       }
     } catch (e) {
-      debugPrint('Error logging in: $e');
+      debugPrint('Error saat login: $e');
       return false;
     }
   }
+
 
 
   /// **LOGOUT USER**

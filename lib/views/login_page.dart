@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iremia/controllers/user_controller.dart';
 import 'package:iremia/models/user_model.dart';
 import 'package:iremia/theme/global_color_theme.dart';
+import 'package:iremia/views/admin/admin_home_page.dart';
 import 'package:iremia/views/register_page.dart';
 import 'package:iremia/views/widgets/navbar.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +29,69 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
     super.dispose();
   }
+  
+    void _handleLogin(BuildContext context) async {
+      final userController = Provider.of<UserController>(context, listen: false);
+      if (_formKey.currentState!.validate()) {
+        final email = _emailController.text.trim();
+        final password = _passwordController.text.trim();
+
+        final success = await userController.loginUser(
+            email, password); // Menggunakan loginUser
+        if (success) {
+          final userRole = userController.currentUser?.role;
+
+          // Menentukan halaman berdasarkan role
+          String targetRoute;
+          if (userRole == 'admin') {
+            targetRoute = AdminHomePage.routename;
+          } else if (userRole == 'user') {
+            targetRoute = Navbar.routname;
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              _buildSnackBar(
+                  'Role tidak dikenali', GlobalColorTheme.errorColor),
+            );
+            return;
+          }
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            _buildSnackBar('Login berhasil', GlobalColorTheme.successColor),
+          );
+
+          // Navigasi ke halaman yang sesuai
+          Navigator.pushReplacementNamed(context, targetRoute);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            _buildSnackBar('Login gagal, periksa email atau password',
+                GlobalColorTheme.errorColor),
+          );
+        }
+      }
+    }
+    SnackBar _buildSnackBar(String message, Color backgroundColor) {
+      return SnackBar(
+        dismissDirection: DismissDirection.up,
+        backgroundColor: backgroundColor,
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height - 100,
+          left: 10,
+          right: 10,
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(milliseconds: 1500),
+        content: Text(
+          message,
+          style: GoogleFonts.poppins(color: Colors.white),
+        ),
+      );
+    }
+
   @override
   Widget build(BuildContext context) {
     Provider.of<UserController>(context);
     final loginProvider = Provider.of<UserModel>(context);
-    final userController = Provider.of<UserController>(context, listen: false);
+    
     final heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -174,56 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                           height: 50,
                         ),
                         GestureDetector(
-                          onTap: () async {
-                            if (_formKey.currentState!.validate()) {
-                              final email = _emailController.text.trim();
-                              final password = _passwordController.text.trim();
-              
-                              final success =
-                                  await userController.loginUser(email, password);
-                              if (success) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    dismissDirection: DismissDirection.up,
-                                    backgroundColor: GlobalColorTheme.successColor,
-                                    margin: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              100,
-                                          left: 10,
-                                          right: 10),
-                                      behavior: SnackBarBehavior.floating,
-                                    duration: const Duration(milliseconds: 1000),
-                                    content: Text('Login berhasil', style: GoogleFonts.poppins(color: Colors.white),)
-                                    ),
-                                );
-                                  Navigator.pushReplacementNamed(context, Navbar.routname);
-                                // Navigate to Home Page
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      dismissDirection: DismissDirection.up,
-                                      backgroundColor:
-                                          GlobalColorTheme.errorColor,
-                                      margin: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                                  .size
-                                                  .height - 100,
-                                          left: 10,
-                                          right: 10),
-                                      behavior: SnackBarBehavior.floating,
-                                      duration:
-                                          const Duration(milliseconds: 1000),
-                                      content: Text(
-                                        'Login gagal',
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.white),
-                                      )),
-                                );
-                              }
-                            }
-                          },
+                          onTap: () => _handleLogin(context),
                           child: Container(
                             width: 122,
                             height: 40,

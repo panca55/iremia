@@ -8,7 +8,12 @@ import 'package:iremia/models/diagnose_model.dart';
 import 'package:iremia/models/question_model.dart';
 import 'package:iremia/models/user_model.dart';
 import 'package:iremia/provider/articles_provider.dart';
+import 'package:iremia/provider/latest_diagnoses_provider.dart';
 import 'package:iremia/provider/question_provider.dart';
+import 'package:iremia/views/admin/admin_home_page.dart';
+import 'package:iremia/views/admin/diagnose_result_admin.dart';
+import 'package:iremia/views/admin/diagnose_result_all.dart';
+import 'package:iremia/views/admin/widgets/navbar_admin.dart';
 import 'package:iremia/views/article_page.dart';
 import 'package:iremia/views/diagnose_history.dart';
 import 'package:iremia/views/diagnose_result.dart';
@@ -16,6 +21,7 @@ import 'package:iremia/views/edit_profile_page.dart';
 import 'package:iremia/views/login_page.dart';
 import 'package:iremia/views/questionaire_page.dart';
 import 'package:iremia/views/register_page.dart';
+import 'package:iremia/views/admin/users_diagnose_history.dart';
 import 'package:iremia/views/widgets/navbar.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +41,7 @@ await Firebase.initializeApp(
                 ChangeNotifierProvider(create: (_) => QuestionModel()),
                 ChangeNotifierProvider(create: (_) => DiagnosisModel()),
                 ChangeNotifierProvider(create: (_) => UserController()),
+                ChangeNotifierProvider(create: (_) => LatestDiagnosesProvider()),
               ],
               child: const MyApp(),
             ),
@@ -57,7 +64,12 @@ class MyApp extends StatelessWidget {
         QuestionnairePage.routeName: (context) => const QuestionnairePage(),
         DiagnoseResult.routeName: (context) =>  const DiagnoseResult(),
         DiagnoseHistory.routename: (context) =>  const DiagnoseHistory(),
-        Navbar.routname: (context) =>  Navbar()
+        Navbar.routname: (context) =>  Navbar(),
+        AdminHomePage.routename: (context) =>  const AdminHomePage(),
+        UsersDiagnoseHistory.routename: (context) =>  const UsersDiagnoseHistory(),
+        NavbarAdmin.routname: (context) =>  NavbarAdmin(),
+        DiagnoseResultAll.routeName: (context) =>  const DiagnoseResultAll(),
+        DiagnoseResultAdmin.routeName: (context) =>  const DiagnoseResultAdmin(),
       },
     );
   }
