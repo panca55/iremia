@@ -303,9 +303,28 @@ class QuestionProvider with ChangeNotifier {
       throw Exception('Error fetching diagnoses: $e');
     }
   }
-
-
-  void saveAnswer(int questionId, double cfUser, int bai) {
+  
+  Future<void> deleteDiagnosis(String diagnosaId) async {
+    try {
+      // 1. Hapus artikel dari Firestore
+      await _firestore.collection('diagnoses').doc(diagnosaId).delete();
+      _diagnose.removeWhere((diagnose) => diagnose.diagnosisId == diagnosaId);
+      notifyListeners();
+      debugPrint('Diagnosa berhasil dihapus.');
+    } catch (e) {
+      debugPrint('Gagal menghapus artikel: $e');
+      throw Exception('Gagal menghapus artikel: $e');
+    }
+  }
+  final Map<int, int> _selectedAnswers = {};
+  int? getSelectedAnswerIndex(int questionId) {
+    return _selectedAnswers[questionId];
+  }
+  void resetAnswers() {
+    _selectedAnswers.clear();
+    notifyListeners();
+  }
+  void saveAnswer(int questionId, double cfUser, int bai, int selectedIndex) {
     final question = getQuestionById(questionId);
     final cfPakar = question.cfPakar;
 
@@ -313,6 +332,7 @@ class QuestionProvider with ChangeNotifier {
     _cfResults[questionId] = cfResult;
     debugPrint('${cfUser.toString()} * ${cfPakar.toString()} = ${_cfResults[questionId].toString()}');
     _baiResults[questionId] = bai;
+    _selectedAnswers[questionId] = selectedIndex;
 
     notifyListeners();
   }
@@ -345,6 +365,17 @@ class QuestionProvider with ChangeNotifier {
       return "Anxiety Berat";
     }
   }
+  String getSolution() {
+    if (_finalCF <= 7) {
+      return '';
+    } else if (_finalCF <= 15) {
+      return '''a. Memberikan penguatan / menenangkan\nb. Memberikan sugesti yang positif dan membangun\nc. Mengarahkan pengguna untuk memberikan sugesti positif ke diri sendiri\nd. menganjurkan makan makanan yang sehat, tidur yang cukup dan olahraga yang teratur''';
+    } else if (_finalCF <= 25) {
+      return '''a. Mengarahkan pengguna untuk menenangkan diri\nb. Apabila pengguna merasa tidak ada perbaikan atau perubahan, maka dianjurkan untuk konsultasi dengan orang yang profesional''';
+    } else {
+      return '''Dianjurkan untuk konsultasi dengan orang yang profesional untuk mendapat penanganan lebih lanjut''';
+    }
+  }
 
   Future<void> saveDiagnosis(String userId) async {
     try {
@@ -365,6 +396,7 @@ class QuestionProvider with ChangeNotifier {
         totalCf: _finalCF,
         totalBai: _totalBai,
         diagnosisResult: getDiagnosisResult(),
+        solution: getSolution(),
         dateDiagnosis: formattedDate,
         dateCreated: DateTime.now()
       );
@@ -376,7 +408,8 @@ class QuestionProvider with ChangeNotifier {
         'totalCf': diagnosis.totalCf,
         'totalBai': diagnosis.totalBai,
         'diagnosisResult': diagnosis.diagnosisResult,
-        'dateDiagnosis': diagnosis.dateDiagnosis, // String formatted
+        'solution': diagnosis.solution,
+        'dateDiagnosis': diagnosis.dateDiagnosis,
         'dateCreated': FieldValue.serverTimestamp(),
       });
 

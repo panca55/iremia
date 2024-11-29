@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iremia/controllers/user_controller.dart';
 import 'package:iremia/models/user_model.dart';
 import 'package:iremia/theme/global_color_theme.dart';
-import 'package:iremia/views/admin/admin_home_page.dart';
+import 'package:iremia/views/admin/widgets/navbar_admin.dart';
 import 'package:iremia/views/register_page.dart';
 import 'package:iremia/views/widgets/navbar.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
           // Menentukan halaman berdasarkan role
           String targetRoute;
           if (userRole == 'admin') {
-            targetRoute = AdminHomePage.routename;
+            targetRoute = NavbarAdmin.routname;
           } else if (userRole == 'user') {
             targetRoute = Navbar.routname;
           } else {

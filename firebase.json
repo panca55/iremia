@@ -1,1 +1,23 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"iremia-c228c","appId":"1:977802706651:android:de95b2e23004c1ff95d6fe","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"iremia-c228c","configurations":{"android":"1:977802706651:android:de95b2e23004c1ff95d6fe","ios":"1:977802706651:ios:e92257c3dd9e4e8995d6fe","web":"1:977802706651:web:9a811c669aa504e895d6fe"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "iremia-c228c",
+                    "appId": "1:977802706651:android:5b30059314140c6d95d6fe",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "iremia-c228c",
+                    "configurations": {
+                        "android": "1:977802706651:android:5b30059314140c6d95d6fe",
+                        "ios": "1:977802706651:ios:e92257c3dd9e4e8995d6fe",
+                        "web": "1:977802706651:web:9a811c669aa504e895d6fe"
+                    }
+                }
+            }
+        }
+    }
+}

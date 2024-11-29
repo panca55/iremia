@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iremia/models/articles_model.dart';
 import 'package:iremia/provider/articles_provider.dart';
+import 'package:iremia/theme/global_color_theme.dart';
 import 'package:provider/provider.dart';
 
 class ArticlePage extends StatelessWidget {
@@ -21,11 +22,10 @@ class ArticlePage extends StatelessWidget {
       appBar: AppBar(
         surfaceTintColor: Colors.white,
         centerTitle: true,
-        title: Text(article!.title, style: GoogleFonts.poppins(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),),
+        title: Text(article!.title!, style: GoogleFonts.poppins(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),),
         leading: const BackButton(color: Colors.black,),
         backgroundColor: Colors.white,
         foregroundColor: Colors.white,
-
       ),
       body: Padding(
         padding: const EdgeInsets.only(left:16.0, right: 16.0, bottom: 16.0),
@@ -35,14 +35,18 @@ class ArticlePage extends StatelessWidget {
             Container(
               height: 200,
               width: double.infinity,
-              color: Colors.grey[300],
-              child: const Center(
-                child: Icon(Icons.image, size: 50, color: Colors.grey),
+              decoration:article!.image != null ? BoxDecoration(
+                image: DecorationImage(image:NetworkImage(article!.image!), fit: BoxFit.cover),
+              ): BoxDecoration(
+                color: Colors.grey[300],
               ),
+              child: article!.image == null ? const Center(
+                child: Icon(Icons.image, size: 50, color: Colors.grey),
+              ) : null,
             ),
             const SizedBox(height: 16),
             Text(
-              article!.title,
+              article!.title!,
               style: const TextStyle(
                   fontSize: 24, fontWeight: FontWeight.bold),
             ),
@@ -50,12 +54,12 @@ class ArticlePage extends StatelessWidget {
             Text(
               'By ${article!.author} | ${article!.publish}',
               style: const TextStyle(
-                  color: Colors.grey, fontStyle: FontStyle.italic),
+                  color: Colors.black),
             ),
             const Divider(),
             const SizedBox(height: 8),
             Text(
-              article!.content,
+              article!.content!,
               textAlign: TextAlign.justify,
             ),
             const SizedBox(height: 16),
@@ -84,7 +88,7 @@ class ArticlePage extends StatelessWidget {
                       height: 90,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: otherArticle.color,
+                        color: GlobalColorTheme.itemListColor,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,7 +97,7 @@ class ArticlePage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                otherArticle.title,
+                                otherArticle.title!,
                                 style: GoogleFonts.poppins(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -101,7 +105,7 @@ class ArticlePage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                otherArticle.author,
+                                otherArticle.author!,
                                 style: GoogleFonts.poppins(
                                   color: Colors.white.withOpacity(0.8),
                                   fontSize: 12,

@@ -12,6 +12,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userController = Provider.of<UserController>(context);
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
@@ -20,7 +21,7 @@ class ProfilePage extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 26),
+        padding: const EdgeInsets.only(left: 26, right: 26),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -38,7 +39,7 @@ class ProfilePage extends StatelessWidget {
             ),
             Center(
                 child: Text(
-              'Nama Pengguna',
+              userController.currentUser!.name!,
               style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 12,
@@ -85,20 +86,17 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: screenHeight/1.9,
+              height: screenHeight/2.2,
             ),
             GestureDetector(
-              onTap: (){
-                final userController =
-                    Provider.of<UserController>(context, listen: false);
-                userController.logoutUser();
-                PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
+              onTap: () async{
+                await PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
                   context,
                   settings: const RouteSettings(name: LoginPage.routname),
                   screen: const LoginPage(),
                   withNavBar: false,
                   pageTransitionAnimation: PageTransitionAnimation.scale,
-                );
+                ).then((value)=>userController.logoutUser());
               },
               child: Container(
                 padding:

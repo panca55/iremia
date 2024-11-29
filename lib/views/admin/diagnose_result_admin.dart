@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iremia/controllers/pdf_controller_admin.dart';
 import 'package:iremia/provider/question_provider.dart';
 import 'package:iremia/theme/global_color_theme.dart';
-import 'package:iremia/views/widgets/navbar.dart';
+import 'package:iremia/views/admin/widgets/navbar_admin.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 import 'package:printing/printing.dart';
@@ -34,7 +34,8 @@ class DiagnoseResultAdmin extends StatelessWidget {
         title: const Text('Hasil Diagnosa'),
         shadowColor: Colors.black.withOpacity(0.25),
         leading: GestureDetector(
-          onTap: ()=> Navigator.of(context).popUntil(ModalRoute.withName(Navbar.routname)),
+          onTap: ()=> Navigator.of(context)
+              .popUntil(ModalRoute.withName(NavbarAdmin.routname)),
           child: Container(
             width: 32,
             height: 32,

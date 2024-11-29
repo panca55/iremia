@@ -35,6 +35,8 @@ class LatestDiagnosesProvider with ChangeNotifier {
             'gender': userData['gender'] ?? '-',
             'diagnosisResult':
                 diagnosis['diagnosisResult'] ?? 'Tidak ada hasil',
+            'solution':
+                diagnosis['solution'] ?? 'Tidak ada hasil',
             'dateDiagnosis': diagnosis['dateDiagnosis'] ?? '-',
             'totalCf': diagnosis['totalCf'] ?? 0.0,
             'diagnosisId': diagnosis['diagnosisId'],

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iremia/controllers/user_controller.dart';
 import 'package:iremia/theme/global_color_theme.dart';
 import 'package:iremia/views/admin/diagnose_result_all.dart';
+import 'package:iremia/views/admin/diagnose_result_table.dart';
 import 'package:iremia/views/admin/users_diagnose_history.dart';
 import 'package:iremia/views/admin/widgets/latest_diagnoses_table.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -44,7 +45,7 @@ class AdminHomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Semua User',
+                  'Rekap Diagnosa Terakhir Semua User',
                   style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 12,
@@ -52,14 +53,26 @@ class AdminHomePage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const DiagnoseResultAll(),
-                      ),
+                    PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
+                      context,
+                      settings: RouteSettings(
+                          name: DiagnoseResultTable.routeName),
+                      screen: const DiagnoseResultTable(),
+                      withNavBar: false,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
                     );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    color: GlobalColorTheme.primaryColor,
+                    decoration: BoxDecoration(
+                        color: GlobalColorTheme.primaryColor,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              offset: const Offset(0, 4))
+                        ]),
                     child: Row(
                       children: [
                         const Icon(Icons.download_sharp, size: 12, color: Colors.white,),
@@ -75,6 +88,57 @@ class AdminHomePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const LatestDiagnosesTable(),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'List User',
+                  style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
+                      context,
+                      settings:
+                          RouteSettings(name: DiagnoseResultAll.routeName),
+                      screen: const DiagnoseResultAll(),
+                      withNavBar: false,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: GlobalColorTheme.primaryColor,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              offset: const Offset(0, 4))
+                        ]),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.download_sharp,
+                          size: 12,
+                          color: Colors.white,
+                        ),
+                        Text('UNDUH',
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
             const SizedBox(height: 10),
             Expanded(
               child: FutureBuilder(

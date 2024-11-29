@@ -86,6 +86,7 @@ class PdfController extends ChangeNotifier {
               pw.Text(
                 'Tingkat Anxiety Kamu',
                 style: pw.TextStyle(
+                  font: poppinsRegular,
                   color: PdfColors.black,
                   fontSize: 14,
                   fontWeight: pw.FontWeight.bold,
@@ -111,8 +112,19 @@ class PdfController extends ChangeNotifier {
                   child: _buildChartBar(finalCfInteger),
                 )
               ]),
+              pw.SizedBox(height: 64),
+              pw.Text(
+                finalCfInteger <= 7 ? '''Ketika kamu cemaas menghadapi sesuatu itu wajar kok, ayo mulai kenal diri kamu sendiri dan bilang ke diri kamu kalo kamu pasti bisa melewati ini. Jangan lupa makan, tidur yang cukup dan olahraga yang teratur yaa, semangattt''':
+                (finalCfInteger <=15 ?'''Kamu coba tenang yaa. temukan ketenanganmu di hal-hal yang kamu sukai atau tempat-tempat yang kamu senangi. Kalo kamu masih ngerasa cemas yang berlebih, aku saranin kamu coba konsultasi ke orang-orang yang profesional (psikolog, konselor atau profesional lain), semangatt ya dan jangan lupa makan makanan yang sehat''':
+                '''Aku saranin buat kamu Konsultasi dengan orang-orang yang profesional (psikolog,konselor atau profesional lain). Konsultasi ke mereka itu asik loh, yok jangan takut konsultasi. Banyak hal baik dari semesta yang selalu ada di sekitar kamu, jangan berputus asa ya.'''),
+                textAlign: pw.TextAlign.center,
+                style: pw.TextStyle(
+                  font: poppinsRegular,
+                  color: PdfColors.black,
+                  fontSize: 14,
+                ),
+              ),
               pw.Spacer(),
-
               // Nilai CF dan Tanggal
               pw.Row(
                 crossAxisAlignment: pw.CrossAxisAlignment.end,
@@ -120,14 +132,16 @@ class PdfController extends ChangeNotifier {
                 children: [
                   pw.Text(
                     'Nilai CF: $finalCfInteger',
-                    style: const pw.TextStyle(
+                    style: pw.TextStyle(
+                      font: poppinsRegular,
                       fontSize: 12,
                       color: PdfColors.black,
                     ),
                   ),
                   pw.Text(
                     diagnosis.dateDiagnosis!,
-                    style: const pw.TextStyle(
+                    style: pw.TextStyle(
+                      font: poppinsRegular,
                       fontSize: 12,
                       color: PdfColors.black,
                     ),

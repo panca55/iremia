@@ -10,6 +10,7 @@ import 'package:iremia/models/user_model.dart';
 import 'package:iremia/provider/articles_provider.dart';
 import 'package:iremia/provider/latest_diagnoses_provider.dart';
 import 'package:iremia/provider/question_provider.dart';
+import 'package:iremia/views/admin/add_article.dart';
 import 'package:iremia/views/admin/admin_home_page.dart';
 import 'package:iremia/views/admin/diagnose_result_admin.dart';
 import 'package:iremia/views/admin/diagnose_result_all.dart';
@@ -24,12 +25,18 @@ import 'package:iremia/views/register_page.dart';
 import 'package:iremia/views/admin/users_diagnose_history.dart';
 import 'package:iremia/views/widgets/navbar.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
 WidgetsFlutterBinding.ensureInitialized();
 await initializeDateFormatting('id_ID', null);
 await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+await Supabase.initialize(
+    url: 'https://owwgdyjhgorcqxnhvjlo.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93d2dkeWpoZ29yY3F4bmh2amxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI3MzAxNDcsImV4cCI6MjA0ODMwNjE0N30.bkuKKFS6j0gjiV9wW5hZyYk2vlGKNhjjCtngGtZ4lJU',
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(
@@ -70,6 +77,7 @@ class MyApp extends StatelessWidget {
         NavbarAdmin.routname: (context) =>  NavbarAdmin(),
         DiagnoseResultAll.routeName: (context) =>  const DiagnoseResultAll(),
         DiagnoseResultAdmin.routeName: (context) =>  const DiagnoseResultAdmin(),
+        AddArticle.routname: (context) =>  const AddArticle(),
       },
     );
   }

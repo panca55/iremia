@@ -6,6 +6,7 @@ class DiagnosisModel extends ChangeNotifier {
   final double? totalCf;
   final int? totalBai;
   final String? diagnosisResult;
+  final String? solution;
   final String? dateDiagnosis;
   final DateTime? dateCreated;
 
@@ -15,6 +16,7 @@ class DiagnosisModel extends ChangeNotifier {
     this.totalCf,
     this.totalBai,
     this.diagnosisResult,
+    this.solution,
     this.dateDiagnosis,
     this.dateCreated
   });
@@ -26,6 +28,7 @@ class DiagnosisModel extends ChangeNotifier {
       totalCf: (data['totalCf'] as num?)?.toDouble(),
       totalBai: (data['totalBai'] as num?)?.toInt(),
       diagnosisResult: data['diagnosisResult'] as String?,
+      solution: data['solution'] as String?,
       dateDiagnosis: data['dateDiagnosis'] as String?,
       dateCreated: (data['dateCreated']).toDate()
     );
@@ -38,6 +41,7 @@ class DiagnosisModel extends ChangeNotifier {
       'totalCf': totalCf,
       'totalBai': totalBai,
       'diagnosisResult': diagnosisResult,
+      'solution': solution,
       'dateDiagnosis': dateDiagnosis,
       'dateCreated': dateCreated,
     };

@@ -51,7 +51,7 @@ class CardHome extends StatelessWidget {
                     'Kenali Tingkat Anxietymu, Mulai dari Sini!',
                     style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold),
                   ),
                 ),

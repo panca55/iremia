@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iremia/config/navigator_historypage.dart';
-import 'package:iremia/config/navigator_homepage.dart';
+import 'package:iremia/config/admin/navigator_articlepage_admin.dart';
+import 'package:iremia/config/admin/navigator_homepage_admin.dart';
 import 'package:iremia/config/navigator_profilepage.dart';
 import 'package:iremia/theme/global_color_theme.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -48,8 +48,8 @@ class NavbarAdmin extends StatelessWidget {
 
   List<Widget> _buildScreens() {
     return [
-      const NavigatorHomepage(),
-      const NavigatorHistorypage(),
+      const NavigatorHomepageAdmin(),
+      const NavigatorArticlepageAdmin(),
       const NavigatorProfilepage(),
     ];
   }
